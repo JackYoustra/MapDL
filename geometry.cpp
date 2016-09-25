@@ -2,11 +2,17 @@
 
 
 
-Geometry::Geometry()
-{
+Geometry::Geometry(PolyListPtr polyList){
+	this->coordinates = polyList;
 }
 
 
 Geometry::~Geometry()
 {
 }
+
+polygon Geometry::parsePolygon(json input){
+	return polygon();
+}
+
+
