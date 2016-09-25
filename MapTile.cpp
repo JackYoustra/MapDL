@@ -48,17 +48,20 @@ MapTile::MapTile(std::string jsonPath) {
 		json geometryJSON = pList["geometry"];
 		std::string type = geometryJSON["type"].get<std::string>();
 		Geometry::PolyListPtr polyLists(new Geometry::PolyList);
-		if (type != "MultiPolygon") {
+		if (type == "Polygon") {
 			auto linearringarray = geometryJSON["coordinates"].get<std::vector<json>>();
 			polyLists->push_back(Geometry::parsePolygon(linearringarray));
 		}
-		else {
+		else if(type == "MultiPolygon") {
 			// need to go through each polygon
 			auto polyarray = geometryJSON["coordinates"].get<std::vector<json>>();
 			for (auto currentPoly = polyarray.begin(); currentPoly != polyarray.end(); ++currentPoly) {
 				auto linearringarray = currentPoly->get<std::vector<json>>();
 				polyLists->push_back(Geometry::parsePolygon(linearringarray));
 			}
+		}
+		else {
+			throw("PARSE CASE NOT HANDLED");
 		}
 		Geometry::GeometryPtr geometry(new Geometry(polyLists));
 		Building::BuildingPtr building(new Building(id, osm_id, name, type, geometry));
@@ -73,6 +76,6 @@ MapTile::~MapTile()
 
 
 int main(int argc, char** argv) {
-	//MapTile("san-francisco_california.imposm-geojson\\san-francisco_california_buildings.geojson");
-	MapTile("sf_buildings_sample.geojson");
+	MapTile("san-francisco_california.imposm-geojson\\san-francisco_california_buildings.geojson");
+	//MapTile("sf_buildings_sample.geojson");
 }
