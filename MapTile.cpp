@@ -47,23 +47,20 @@ MapTile::MapTile(std::string jsonPath) {
 
 		json geometryJSON = pList["geometry"];
 		std::string type = geometryJSON["type"].get<std::string>();
-		auto polygonArray = geometryJSON["coordinates"].get<std::vector<json>>();
-		Geometry::PolyListPtr polygons(new Geometry::PolyList); // list of polygons (aka a single building entry)
-		for (auto currentPoly = polygonArray.begin(); currentPoly != polygonArray.end(); ++currentPoly) {
-			auto pointArray = currentPoly->get<std::vector<json>>();
-			Geometry::PolygonPtr points(new Geometry::polygon); // list of points for a polygon
-			for (auto currentPoint = pointArray.begin(); currentPoint != pointArray.end(); ++currentPoint) {
-				auto coordinatePair = currentPoint->get<std::vector<json>>();
-				double latitude = currentPoint->at(0).get<double>();
-				double longitude = currentPoint->at(1).get<double>();
-				Geometry::PointPtr point(new Geometry::Point()); // lat and longitude struct
-				latitude = point->latitude;
-				longitude = point->longitude;
-				points->push_back(point);
-			}
-			polygons->push_back(points);
+		Geometry::PolyListPtr polyLists(new Geometry::PolyList);
+		if (type != "MultiPolygon") {
+			auto linearringarray = geometryJSON["coordinates"].get<std::vector<json>>();
+			polyLists->push_back(Geometry::parsePolygon(linearringarray));
 		}
-		Geometry::GeometryPtr geometry(new Geometry(polygons));
+		else {
+			// need to go through each polygon
+			auto polyarray = geometryJSON["coordinates"].get<std::vector<json>>();
+			for (auto currentPoly = polyarray.begin(); currentPoly != polyarray.end(); ++currentPoly) {
+				auto linearringarray = currentPoly->get<std::vector<json>>();
+				polyLists->push_back(Geometry::parsePolygon(linearringarray));
+			}
+		}
+		Geometry::GeometryPtr geometry(new Geometry(polyLists));
 		Building::BuildingPtr building(new Building(id, osm_id, name, type, geometry));
 		buildingList->push_back(building);
 	}

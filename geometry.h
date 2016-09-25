@@ -32,7 +32,7 @@ public:
 	Geometry(PolyListPtr);
 	~Geometry();
 
-	polygon parsePolygon(json input);
+	static Geometry::polyPtr parsePolygon(std::vector<json> input);
 
 private:
 	std::string type;
