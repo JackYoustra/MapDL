@@ -74,7 +74,7 @@ MapTile::~MapTile()
 {
 }
 
-
+//https://mapzen.com/data/metro-extracts/metro/san-francisco_california/
 int main(int argc, char** argv) {
 	MapTile("san-francisco_california.imposm-geojson\\san-francisco_california_buildings.geojson");
 	//MapTile("sf_buildings_sample.geojson");
