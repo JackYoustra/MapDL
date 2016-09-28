@@ -7,6 +7,7 @@ class Building
 public:
 	Building(int id, int osm_id, std::string name, std::string type, Geometry::GeometryPtr geometry);
 	~Building();
+	bool pointInBuilding(double latitude, double longitude);
 	typedef std::shared_ptr<Building> BuildingPtr;
 private:
 	// which ones need to be in shared pointers?

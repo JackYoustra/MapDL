@@ -20,6 +20,9 @@ public:
 		double latitude, longitude;
 	};
 
+	// computing of point inside building
+	bool pointInBuilding(double latitude, double longitude);
+
 	typedef std::shared_ptr<Point> PointPtr;
 	typedef std::vector<PointPtr> linearring;
 	typedef std::shared_ptr<linearring> LinearRingPtr;
@@ -37,4 +40,5 @@ public:
 private:
 	std::string type;
 	PolyListPtr coordinates;
+	unsigned int numberOfVerticies;
 };

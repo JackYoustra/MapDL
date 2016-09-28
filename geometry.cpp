@@ -2,11 +2,28 @@
 
 Geometry::Geometry(PolyListPtr polyList){
 	this->coordinates = polyList;
+	this->numberOfVerticies = 0;
+	for (auto currentPoly = this->coordinates->begin(); currentPoly != this->coordinates->end(); ++currentPoly) {
+		polyPtr ptr = *currentPoly;
+		for (auto currentRing = ptr->begin(); currentRing != ptr->end(); ++currentRing) {
+			LinearRingPtr lineptr = *currentRing;
+			for (auto currentPoint = lineptr->begin(); currentPoint != lineptr->end(); ++currentPoint) {
+				//PointPtr pointptr = *currentPoint;
+				this->numberOfVerticies++;
+			}
+		}
+	}
 }
 
 
 Geometry::~Geometry()
 {
+}
+
+bool Geometry::pointInBuilding(double latitude, double longitude) {
+	bool c = false;
+	int i = 0;
+	int j = numberOfVerticies - 1;
 }
 
 Geometry::polyPtr Geometry::parsePolygon(std::vector<json> input){

@@ -11,5 +11,8 @@ private:
 	typedef std::vector<Building::BuildingPtr> BuildingList;
 	typedef std::shared_ptr<std::vector<Building::BuildingPtr>> BuildingListPtr;
 	BuildingListPtr buildings;
+
+public:
+	BuildingListPtr buildingsInCoordinates(double latitude, double longitude);
 };
 
