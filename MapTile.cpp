@@ -7,7 +7,9 @@
 #include <vector>
 #include "json.hpp"
 #include "geometry.h"
-
+extern "C" {
+	#include "srtm-hgt-reader\srtmHgtReader.h"
+}
 using json = nlohmann::json;
 
 
@@ -75,14 +77,24 @@ MapTile::~MapTile()
 }
 
 MapTile::BuildingListPtr MapTile::buildingsInCoordinates(double latitude, double longitude){
-
-	return BuildingListPtr();
+	BuildingListPtr buildingList = std::make_shared<BuildingList>();
+	for (auto building = this->buildings->begin(); building != this->buildings->end(); ++building) {
+		const Building::BuildingPtr ptr = *building;
+		if (ptr->pointInBuilding(latitude, longitude)) {
+			buildingList->push_back(ptr);
+		}
+	}
+	return buildingList;
 }
 
 //https://mapzen.com/data/metro-extracts/metro/san-francisco_california/
 int main(int argc, char** argv) {
-	MapTile* tile = new MapTile("san-francisco_california.imposm-geojson\\san-francisco_california_buildings.geojson");
-
-
-	//MapTile("sf_buildings_sample.geojson");
+	//MapTile* tile = new MapTile("san-francisco_california.imposm-geojson\\san-francisco_california_buildings.geojson");
+	//std:: cout << srtmGetElevation(37.424151, -122.174440) << std:: endl << srtmGetElevation(37.424748, -122.173749) << std::endl << srtmGetElevation(37.422808, -122.176241) << std::endl;
+	MapTile* tile = new MapTile("sf_buildings_sample.geojson");
+	auto buildingList = tile->buildingsInCoordinates(-122.262040, 37.871474);
+	for (auto building = buildingList->begin(); building != buildingList->end(); ++building) {
+		std::cout << (*building)->toString() << std::endl; // should be valley life sciences
+	}	
+	system("Pause");
 }

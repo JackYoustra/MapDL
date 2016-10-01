@@ -13,7 +13,7 @@
 
 #include "srtmHgtReader.h" //fmod
 
-
+#pragma warning(disable:4996)
 
 //const int secondsPerPx = 1;  //arc seconds per pixel (3 equals cca 90m)
 //const int totalPx = 3601;

@@ -3,7 +3,7 @@
 #include <stdlib.h>
 #include <math.h>
 #include "srtmHgtReader.h"
-
+#pragma warning(disable:4996)
 
 FILE* out;
 void output(int x, int y){

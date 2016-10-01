@@ -37,8 +37,11 @@ public:
 
 	static Geometry::polyPtr parsePolygon(std::vector<json> input);
 
+	typedef std::shared_ptr<std::vector<PointPtr>> VertexList;
+
 private:
 	std::string type;
 	PolyListPtr coordinates;
-	unsigned int numberOfVerticies;
+	
+	VertexList verticies;
 };

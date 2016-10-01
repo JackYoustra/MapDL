@@ -11,3 +11,11 @@ Building::Building(int id, int osm_id, std::string name, std::string type, Geome
 Building::~Building()
 {
 }
+
+bool Building::pointInBuilding(double latitude, double longitude){
+	return this->geometry->pointInBuilding(latitude, longitude);
+}
+
+std::string Building::toString() {
+	return name;
+}
