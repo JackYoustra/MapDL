@@ -1,4 +1,4 @@
-#include "MapTile.h"
+#include "MapSectorData.h"
 #include <iostream>
 #include <fstream>
 #include <sstream>
@@ -30,7 +30,7 @@ std::string get_file_contents(const char *filename)
 	throw(errno);
 }
 
-MapTile::MapTile(std::string jsonPath) {
+MapSectorData::MapSectorData(std::string jsonPath) {
 	std::string rawFileContents = get_file_contents(jsonPath.c_str());
 	json fileJSON = json::parse(rawFileContents.c_str());
 	json featuresJSON = fileJSON["features"];
@@ -72,11 +72,10 @@ MapTile::MapTile(std::string jsonPath) {
 	this->buildings = buildingList;
 }
 
-MapTile::~MapTile()
-{
+MapSectorData::~MapSectorData(){
 }
 
-MapTile::BuildingListPtr MapTile::buildingsInCoordinates(double latitude, double longitude){
+MapSectorData::BuildingListPtr MapSectorData::buildingsInCoordinates(double latitude, double longitude){
 	BuildingListPtr buildingList = std::make_shared<BuildingList>();
 	for (auto building = this->buildings->begin(); building != this->buildings->end(); ++building) {
 		const Building::BuildingPtr ptr = *building;
@@ -89,12 +88,12 @@ MapTile::BuildingListPtr MapTile::buildingsInCoordinates(double latitude, double
 
 //https://mapzen.com/data/metro-extracts/metro/san-francisco_california/
 int main(int argc, char** argv) {
-	//MapTile* tile = new MapTile("san-francisco_california.imposm-geojson\\san-francisco_california_buildings.geojson");
-	//std:: cout << srtmGetElevation(37.424151, -122.174440) << std:: endl << srtmGetElevation(37.424748, -122.173749) << std::endl << srtmGetElevation(37.422808, -122.176241) << std::endl;
-	MapTile* tile = new MapTile("sf_buildings_sample.geojson");
+	//MapSectorData* tile = new MapSectorData("san-francisco_california.imposm-geojson\\san-francisco_california_buildings.geojson");
+	//std:: cout << srtmGetElevation(37	.424151, -122.174440) << std:: endl << srtmGetElevation(37.424748, -122.173749) << std::endl << srtmGetElevation(37.422808, -122.176241) << std::endl;
+	MapSectorData* tile = new MapSectorData("sf_buildings_sample.geojson");
 	auto buildingList = tile->buildingsInCoordinates(-122.262040, 37.871474);
 	for (auto building = buildingList->begin(); building != buildingList->end(); ++building) {
 		std::cout << (*building)->toString() << std::endl; // should be valley life sciences
-	}	
+	}
 	system("Pause");
 }

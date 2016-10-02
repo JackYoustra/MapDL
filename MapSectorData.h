@@ -2,10 +2,10 @@
 #include <string>
 #include <memory>
 #include "Building.h"
-class MapTile{
+class MapSectorData{
 public:
-	MapTile(std::string jsonPath);
-	~MapTile();
+	MapSectorData(std::string jsonPath);
+	~MapSectorData();
 
 private:
 	typedef std::vector<Building::BuildingPtr> BuildingList;
